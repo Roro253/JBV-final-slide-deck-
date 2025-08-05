@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>Build it, and they will come</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 50px 80px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 15px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: #6b7280;
+      margin-bottom: 25px;
+      text-align: center;
+      font-style: italic;
+    }
+    .stack-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .tech-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      width: 600px;
+      height: 480px;
+    }
+    .stack-layer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      border: 2px solid #e2e8f0;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .stack-layer:hover {
+      transform: translateX(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .applications {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      height: 100px;
+      border-radius: 12px 12px 0 0;
+    }
+    .models {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      height: 120px;
+    }
+    .infrastructure {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      height: 130px;
+    }
+    .semiconductors {
+      background: linear-gradient(135deg, #6b7280, #4b5563);
+      color: white;
+      height: 130px;
+      border-radius: 0 0 12px 12px;
+    }
+    .layer-content {
+      flex: 1;
+    }
+    .layer-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .layer-description {
+      font-size: 13px;
+      opacity: 0.9;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .layer-examples {
+      font-size: 11px;
+      opacity: 0.8;
+      font-style: italic;
+    }
+    .layer-valuation {
+      text-align: right;
+      min-width: 120px;
+    }
+    .valuation-amount {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .valuation-label {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    .stack-insight {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.95);
+      border: 2px solid #0a2e8f;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-width: 160px;
+    }
+    .insight-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0a2e8f;
+      margin-bottom: 10px;
+    }
+    .insight-point {
+      margin-bottom: 8px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .foundation-note {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #6b7280;
+      font-style: italic;
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <h2>Build it, and they will come</h2>
+      <div class="subtitle">AI Tech Stack Evolution – Foundation to Applications (2025)</div>
+      
+      <div class="stack-container">
+        <div class="tech-stack">
+          <!-- Applications Layer (Top) -->
+          <div class="stack-layer applications">
+            <div class="layer-content">
+              <div class="layer-title">Applications</div>
+              <div class="layer-description">End-user AI products and services</div>
+              <div class="layer-examples">ChatGPT, Midjourney, Cursor, Harvey</div>
+            </div>
+            <div class="layer-valuation">
+              <div class="valuation-amount">$2.1T</div>
+              <div class="valuation-label">Market Value</div>
+            </div>
+          </div>
+          
+          <!-- Models Layer -->
+          <div class="stack-layer models">
+            <div class="layer-content">
+              <div class="layer-title">Models</div>
+              <div class="layer-description">Foundation models and AI capabilities</div>
+              <div class="layer-examples">OpenAI, Anthropic, Cohere, Mistral</div>
+            </div>
+            <div class="layer-valuation">
+              <div class="valuation-amount">$850B</div>
+              <div class="valuation-label">Market Value</div>
+            </div>
+          </div>
+          
+          <!-- Infrastructure Layer -->
+          <div class="stack-layer infrastructure">
+            <div class="layer-content">
+              <div class="layer-title">Infrastructure</div>
+              <div class="layer-description">Cloud, compute, and AI platforms</div>
+              <div class="layer-examples">AWS, Azure, GCP, Databricks</div>
+            </div>
+            <div class="layer-valuation">
+              <div class="valuation-amount">$1.2T</div>
+              <div class="valuation-label">Market Value</div>
+            </div>
+          </div>
+          
+          <!-- Semiconductors Layer (Bottom) -->
+          <div class="stack-layer semiconductors">
+            <div class="layer-content">
+              <div class="layer-title">Semiconductors</div>
+              <div class="layer-description">AI chips and hardware foundation</div>
+              <div class="layer-examples">NVIDIA, AMD, Intel, Custom ASICs</div>
+            </div>
+            <div class="layer-valuation">
+              <div class="valuation-amount">$4.3T</div>
+              <div class="valuation-label">Market Value</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Stack Insight -->
+        <div class="stack-insight">
+          <div class="insight-title">Stack Dynamics</div>
+          <div class="insight-point">
+            <strong>Foundation First:</strong> Hardware enables everything above
+          </div>
+          <div class="insight-point">
+            <strong>Value Migration:</strong> Applications capture end-user value
+          </div>
+          <div class="insight-point">
+            <strong>Growth Pattern:</strong> Each layer enables the next
+          </div>
+          <div class="insight-point">
+            <strong>Investment Timing:</strong> Build foundation, harvest applications
+          </div>
+        </div>
+      </div>
+      
+      <div class="foundation-note">
+        "Build the foundation, and applications will flourish" – Tech stack maturity drives application innovation
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>8</span>
+    </div>
+  </div>
+    <div class="navigation">
+      <a href="private_markets.html" class="nav-btn">← Previous</a>
+      <span class="page-info">13 of 17</span>
+      <a href="fund_strategy.html" class="nav-btn">Next →</a>
+    </div>
+</body>
+</html>
+

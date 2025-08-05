@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>Private Markets – Pure-Play AI Advantage</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 60px 100px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 42px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .content-container {
+      display: flex;
+      margin-top: 20px;
+      gap: 40px;
+    }
+    .chart-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .text-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .point-item {
+      margin-bottom: 20px;
+      padding-left: 15px;
+      border-left: 3px solid #0a2e8f;
+    }
+    .point-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 5px;
+    }
+    .point-description {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.5;
+    }
+    .source {
+      font-size: 11px;
+      color: #666;
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .highlight-box {
+      background: #e8f0ff;
+      border-left: 4px solid #0a2e8f;
+      padding: 15px 20px;
+      margin: 0 0 20px;
+      font-size: 16px;
+    }
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .download-options {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <div class="download-options">
+      </div>
+      <h2>Private Markets – Pure-Play AI Advantage</h2>
+      
+      <div class="highlight-box">
+        <strong>Key Insight:</strong> Private markets offer the purest exposure to AI's growth potential, with early-stage investments in category-defining companies positioned to capture maximum returns before public market valuations.
+      </div>
+      
+      <div class="content-container">
+        <div class="chart-container">
+          <div class="chart-title">Private vs. Public Market AI Investment Returns</div>
+          <div style="height: 350px;">
+            <canvas id="returnsChart"></canvas>
+          </div>
+          <div class="source">Source: PitchBook, 2025 Private Market Returns Analysis</div>
+        </div>
+        
+        <div class="text-container">
+          <div class="point-item">
+            <div class="point-title">Direct AI Exposure</div>
+            <div class="point-description">
+              Pure-play private AI companies provide direct exposure to AI's transformative potential, without the dilution found in public market alternatives.
+            </div>
+          </div>
+          
+          <div class="point-item">
+            <div class="point-title">Early Entry Advantage</div>
+            <div class="point-description">
+              Early private market entry captures maximum upside potential, with historical data showing 3-5x higher returns compared to later-stage investments.
+            </div>
+            <div class="source">Source: PitchBook</div>
+          </div>
+          
+          <div class="point-item">
+            <div class="point-title">Valuation Arbitrage</div>
+            <div class="point-description">
+              Private AI companies often trade at significant discounts to their public market counterparts, creating valuation arbitrage opportunities for sophisticated investors.
+            </div>
+          </div>
+          
+          <div class="point-item">
+            <div class="point-title">Liquidity Pathways</div>
+            <div class="point-description">
+              Multiple liquidity pathways are emerging for private AI investments, including strategic acquisitions, SPACs, direct listings, and traditional IPOs.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>13</span>
+    </div>
+  </div>
+
+  <script>
+    // Private vs Public Market Returns Chart
+    const ctx = document.getElementById('returnsChart').getContext('2d');
+    const returnsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Early-Stage Private', 'Late-Stage Private', 'IPO', 'Public Market'],
+        datasets: [{
+          label: 'Average Return Multiple (x)',
+          data: [15, 8, 3, 1.5],
+          backgroundColor: [
+            '#0a2e8f',
+            '#3a57b5',
+            '#6a80db',
+            '#9aa9ff'
+          ],
+          borderColor: [
+            '#0a2e8f',
+            '#3a57b5',
+            '#6a80db',
+            '#9aa9ff'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.raw}x return`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Return Multiple (x)'
+            }
+          }
+        }
+      }
+    });
+  </script>
+    <div class="navigation">
+      <a href="power_law.html" class="nav-btn">← Previous</a>
+      <span class="page-info">12 of 17</span>
+      <a href="tech_stack.html" class="nav-btn">Next →</a>
+    </div>
+</body>
+</html>
+

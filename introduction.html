@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>JBV AI Fund</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: #0a2e8f;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .jbv-logo {
+      font-size: 84px;
+      font-weight: 300;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+    }
+    .main-title {
+      font-size: 72px;
+      font-weight: 300;
+      margin: 30px 0;
+      letter-spacing: -1px;
+    }
+    .subtitle {
+      font-size: 36px;
+      font-weight: 300;
+      margin-bottom: 60px;
+    }
+    .date {
+      margin-top: 60px;
+      font-size: 24px;
+      color: rgba(255,255,255,0.8);
+    }
+    .confidential {
+      margin-top: 30px;
+      font-size: 16px;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .download-options {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .navigation {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .page-info {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="jbv-logo">JBV</div>
+    <h1 class="main-title">JBV AI PowerLaw Fund</h1>
+         <p class="subtitle">Catch the AI Wave through private investments</p>
+    </div>
+    <div class="date">
+      July 2025
+    </div>
+    <div class="confidential">
+      Confidential Document - Do Not Distribute
+    </div>
+    
+    <div class="navigation">
+      <span class="nav-btn" style="opacity: 0.5; cursor: not-allowed;">← Previous</span>
+      <span class="page-info">1 of 17</span>
+      <a href="historical_context.html" class="nav-btn">Next →</a>
+    </div>
+  </div>
+</body>
+</html>
+

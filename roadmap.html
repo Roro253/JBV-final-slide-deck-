@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>Implementation Roadmap</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 60px 100px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 42px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .highlight-box {
+      background: #e8f0ff;
+      border-left: 4px solid #0a2e8f;
+      padding: 15px 20px;
+      margin: 0 0 20px;
+      font-size: 16px;
+    }
+    .chart-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .download-options {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .timeline-legend {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      margin-right: 8px;
+      border-radius: 3px;
+    }
+    .milestone-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    .milestone-item {
+      background: #f8f9fa;
+      border-left: 3px solid #0a2e8f;
+      padding: 15px;
+      width: 23%;
+    }
+    .milestone-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 5px;
+    }
+    .milestone-description {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.4;
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <div class="download-options">
+      </div>
+      <h2>Implementation Roadmap</h2>
+      
+      <div class="highlight-box">
+        <strong>Key Insight:</strong> A strategic, phased investment approach maximizes returns while managing risk. Our roadmap focuses on anchor investments in Q3-Q4 2025, followed by strategic follow-ons in Q1-Q2 2026, with quarterly reassessments to optimize portfolio allocation.
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-title">JBV AI PowerLaw Fund: Investment Timeline (2025-2026)</div>
+        <div style="height: 300px;">
+          <canvas id="roadmapChart"></canvas>
+        </div>
+        
+        <div class="timeline-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #0a2e8f;"></div>
+            <span>Anchor Investments</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #3a57b5;"></div>
+            <span>Follow-on Investments</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #6a80db;"></div>
+            <span>Portfolio Optimization</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background-color: #00875a;"></div>
+            <span>Quarterly Reassessment</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="milestone-container">
+        <div class="milestone-item">
+          <div class="milestone-title">Q3 2025: Initial Deployment</div>
+          <div class="milestone-description">
+            Strategic anchor investments in category-defining AI companies across infrastructure, models, and enterprise applications layers.
+          </div>
+        </div>
+        
+        <div class="milestone-item">
+          <div class="milestone-title">Q4 2025: Market Positioning</div>
+          <div class="milestone-description">
+            Complete core portfolio construction with additional anchor investments in high-conviction opportunities.
+          </div>
+        </div>
+        
+        <div class="milestone-item">
+          <div class="milestone-title">Q1 2026: Strategic Follow-ons</div>
+          <div class="milestone-description">
+            Targeted follow-on investments in portfolio companies demonstrating exceptional traction and market validation.
+          </div>
+        </div>
+        
+        <div class="milestone-item">
+          <div class="milestone-title">Q2 2026: Portfolio Optimization</div>
+          <div class="milestone-description">
+            Final follow-on investments and portfolio balancing to maximize risk-adjusted returns across the AI ecosystem.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>16</span>
+    </div>
+  </div>
+
+  <script>
+    // Roadmap Timeline Chart
+    const ctx = document.getElementById('roadmapChart').getContext('2d');
+    
+    // Create a horizontal bar chart for the roadmap
+    const roadmapChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Q3 2025', 'Q4 2025', 'Q1 2026', 'Q2 2026'],
+        datasets: [
+          {
+            label: 'Anchor Investments',
+            data: [80, 60, 0, 0],
+            backgroundColor: '#0a2e8f',
+            borderColor: '#0a2e8f',
+            borderWidth: 1,
+            barPercentage: 0.8,
+            categoryPercentage: 0.9
+          },
+          {
+            label: 'Follow-on Investments',
+            data: [0, 20, 70, 40],
+            backgroundColor: '#3a57b5',
+            borderColor: '#3a57b5',
+            borderWidth: 1,
+            barPercentage: 0.8,
+            categoryPercentage: 0.9
+          },
+          {
+            label: 'Portfolio Optimization',
+            data: [0, 0, 10, 40],
+            backgroundColor: '#6a80db',
+            borderColor: '#6a80db',
+            borderWidth: 1,
+            barPercentage: 0.8,
+            categoryPercentage: 0.9
+          },
+          {
+            label: 'Quarterly Reassessment',
+            data: [10, 10, 10, 10],
+            backgroundColor: '#00875a',
+            borderColor: '#00875a',
+            borderWidth: 1,
+            barPercentage: 0.8,
+            categoryPercentage: 0.9
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.dataset.label}: ${context.raw}% allocation`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            beginAtZero: true,
+            max: 100,
+            title: {
+              display: true,
+              text: 'Allocation Percentage (%)'
+            },
+            ticks: {
+              callback: function(value) {
+                return value + '%';
+              }
+            }
+          },
+          y: {
+            stacked: true,
+            title: {
+              display: true,
+              text: 'Quarter'
+            }
+          }
+        }
+      }
+    });
+  </script>
+    <div class="navigation">
+      <a href="risks.html" class="nav-btn">← Previous</a>
+      <span class="page-info">16 of 17</span>
+      <a href="references.html" class="nav-btn">Next →</a>
+    </div>
+</body>
+</html>
+

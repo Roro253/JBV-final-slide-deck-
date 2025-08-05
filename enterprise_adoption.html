@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>AI has enterprise...</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 35px 60px 25px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 15px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .content-container {
+      display: flex;
+      gap: 25px;
+      flex: 1;
+    }
+    .chart-section {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .chart-wrapper {
+      height: 320px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    .chart-callout {
+      position: absolute;
+      background: #10b981;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 10;
+      max-width: 140px;
+      text-align: center;
+      top: 140px;
+      right: 100px;
+    }
+    .analysis-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .analysis-header {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 4px solid #0a2e8f;
+    }
+    .analysis-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #0a2e8f;
+      margin: 0;
+    }
+    .analysis-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      border-left: 4px solid;
+    }
+    .current-adoption { border-left-color: #3b82f6; }
+    .growth-rate { border-left-color: #10b981; }
+    .inflection-point { border-left-color: #f59e0b; }
+    .trajectory { border-left-color: #ef4444; }
+    .item-icon {
+      font-size: 11px;
+      margin-right: 6px;
+    }
+    .item-label {
+      font-size: 11px;
+      color: #6b7280;
+      margin-bottom: 1px;
+    }
+    .item-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 2px;
+    }
+    .item-description {
+      font-size: 10px;
+      color: #6b7280;
+      line-height: 1.2;
+    }
+    .enterprise-validation {
+      background: #0a2e8f;
+      color: white;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .validation-title {
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .validation-text {
+      font-size: 11px;
+      opacity: 0.9;
+      line-height: 1.3;
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <h2>AI has enterprise...</h2>
+      
+      <div class="content-container">
+        <div class="chart-section">
+          <div class="chart-subtitle">Share of US business with paid subscriptions to AI (Ramp estimate)</div>
+          <div class="chart-wrapper">
+            <canvas id="enterpriseChart"></canvas>
+            <div class="chart-callout">
+              Positive inflection as reasoning models emerged!
+            </div>
+          </div>
+        </div>
+        
+        <div class="analysis-section">
+          <div class="analysis-header">
+            <div class="analysis-title">Enterprise Adoption Analysis</div>
+          </div>
+          
+          <div class="analysis-item current-adoption">
+            <div class="item-label"><i class="fas fa-building item-icon"></i>Current Adoption</div>
+            <div class="item-value">42% of US Businesses</div>
+            <div class="item-description">Nearly half of US businesses now have paid AI subscriptions as of Q1 2025</div>
+          </div>
+          
+          <div class="analysis-item growth-rate">
+            <div class="item-label"><i class="fas fa-chart-line item-icon"></i>Growth Rate</div>
+            <div class="item-value">6x Growth</div>
+            <div class="item-description">From 7% (Q4 2022) to 42% (Q1 2025) - unprecedented enterprise adoption velocity</div>
+          </div>
+          
+          <div class="analysis-item inflection-point">
+            <div class="item-label"><i class="fas fa-bolt item-icon"></i>Inflection Point</div>
+            <div class="item-value">Q3 2024</div>
+            <div class="item-description">Reasoning models emergence accelerated enterprise adoption from 25% to 42%</div>
+          </div>
+          
+          <div class="analysis-item trajectory">
+            <div class="item-label"><i class="fas fa-rocket item-icon"></i>Trajectory</div>
+            <div class="item-value">Exponential</div>
+            <div class="item-description">S-curve adoption pattern with steepest growth phase just beginning</div>
+          </div>
+          
+          <div class="enterprise-validation">
+            <div class="validation-title">Enterprise Validation</div>
+            <div class="validation-text">Enterprise adoption at 42% validates AI's business utility and ROI, creating massive B2B market opportunity beyond consumer applications.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>6</span>
+    </div>
+  </div>
+
+  <script>
+    // Enterprise Adoption Chart
+    const ctx = document.getElementById('enterpriseChart').getContext('2d');
+    
+    const enterpriseChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Q4 2022', 'Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024', 'Q1 2025'],
+        datasets: [{
+          label: '% of US Businesses',
+          data: [7, 13, 15, 16, 18, 20, 22, 25, 35, 42],
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderWidth: 4,
+          tension: 0.3,
+          pointRadius: 6,
+          pointBackgroundColor: '#3b82f6',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.raw}% of US businesses`;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 45,
+            title: {
+              display: true,
+              text: '% of US Businesses',
+              font: { size: 13, weight: 'bold' }
+            },
+            ticks: {
+              callback: function(value) { return value + '%'; },
+              font: { size: 11 }
+            },
+            grid: { color: '#e5e7eb' }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Timeline',
+              font: { size: 13, weight: 'bold' }
+            },
+            ticks: { 
+              font: { size: 10 },
+              maxRotation: 45
+            },
+            grid: { color: '#e5e7eb' }
+          }
+        }
+      }
+    });
+  </script>
+    <div class="navigation">
+      <a href="ai_revenue.html" class="nav-btn">← Previous</a>
+      <span class="page-info">8 of 17</span>
+      <a href="professional_transformation.html" class="nav-btn">Next →</a>
+    </div>
+</body>
+</html>
+

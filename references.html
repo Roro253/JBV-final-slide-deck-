@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>References</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 50px 100px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .references-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      flex: 1;
+    }
+    .reference-section {
+      display: flex;
+      flex-direction: column;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #0a2e8f;
+      padding-bottom: 3px;
+    }
+    .reference-item {
+      margin-bottom: 8px;
+      padding-left: 8px;
+      border-left: 2px solid #e9ecef;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+    .reference-number {
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-right: 4px;
+    }
+    .reference-title {
+      font-weight: 500;
+      color: #333;
+    }
+    .reference-source {
+      color: #666;
+      font-style: italic;
+    }
+    .download-options {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <div class="download-options">
+      </div>
+      <h2>References</h2>
+      
+      <div class="references-container">
+        <div class="reference-section">
+          <div class="section-title">Market Research & Analysis</div>
+          
+          <div class="reference-item">
+            <span class="reference-number">1.</span>
+            <span class="reference-title">Harvard Business Review - "The Big Idea: Before You Make That Big Decision"</span><br>
+            <span class="reference-source">Harvard Business Review, 2011</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">2.</span>
+            <span class="reference-title">Pew Research - "Mobile Fact Sheet"</span><br>
+            <span class="reference-source">Pew Research Center</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">3.</span>
+            <span class="reference-title">Goldman Sachs - "Generative AI Could Raise Global GDP by 7 Percent"</span><br>
+            <span class="reference-source">Goldman Sachs Intelligence, 2023</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">4.</span>
+            <span class="reference-title">CB Insights - "Artificial Intelligence Funding Trends 2024"</span><br>
+            <span class="reference-source">CB Insights Research, 2024</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">5.</span>
+            <span class="reference-title">McKinsey - "Tech Adoption Curves"</span><br>
+            <span class="reference-source">McKinsey & Company</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">6.</span>
+            <span class="reference-title">UBS Research - "ChatGPT Sets Record for Fastest-Growing User Base"</span><br>
+            <span class="reference-source">Reuters, 2023</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">7.</span>
+            <span class="reference-title">Salesforce - "Salesforce Announces Einstein GPT"</span><br>
+            <span class="reference-source">Salesforce News, 2023</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">8.</span>
+            <span class="reference-title">IDC - "Worldwide Artificial Intelligence Spending Guide"</span><br>
+            <span class="reference-source">IDC, 2024</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">9.</span>
+            <span class="reference-title">Microsoft Investor Relations - "FY 2025 Q1 Earnings"</span><br>
+            <span class="reference-source">Microsoft Corporation, 2025</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">10.</span>
+            <span class="reference-title">App Annie - "2025 State of Mobile"</span><br>
+            <span class="reference-source">data.ai, 2025</span>
+          </div>
+        </div>
+        
+        <div class="reference-section">
+          <div class="section-title">Investment & Valuation Data</div>
+          
+          <div class="reference-item">
+            <span class="reference-number">11.</span>
+            <span class="reference-title">Bloomberg - "Big Tech Stocks Surge on AI Growth"</span><br>
+            <span class="reference-source">Bloomberg, 2025</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">12.</span>
+            <span class="reference-title">PitchBook - "Venture Capital Investment Timing Returns"</span><br>
+            <span class="reference-source">PitchBook Data, 2024</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">13.</span>
+            <span class="reference-title">Andreessen Horowitz - "AI vs SaaS: How to Value Generative AI Companies"</span><br>
+            <span class="reference-source">a16z, 2023</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">14.</span>
+            <span class="reference-title">The Information - "Generative AI Valuations Database"</span><br>
+            <span class="reference-source">The Information, 2025</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">15.</span>
+            <span class="reference-title">Reuters - "NVIDIA Hits $4 Trillion Market Cap"</span><br>
+            <span class="reference-source">Reuters, 2025</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">16.</span>
+            <span class="reference-title">McKinsey - "AI Applications Market Analysis"</span><br>
+            <span class="reference-source">McKinsey & Company</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">17.</span>
+            <span class="reference-title">Gartner - "Survey: AI Enterprise Investments"</span><br>
+            <span class="reference-source">Gartner, 2024</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">18.</span>
+            <span class="reference-title">Harvey AI - "Case Studies and Impact Reports"</span><br>
+            <span class="reference-source">Harvey AI, 2024</span>
+          </div>
+          
+          <div class="reference-item">
+            <span class="reference-number">19.</span>
+            <span class="reference-title">Cursor - "Growth and Impact Report"</span><br>
+            <span class="reference-source">Cursor, 2024</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>17</span>
+    </div>
+  </div>
+    <div class="navigation">
+      <a href="roadmap.html" class="nav-btn">← Previous</a>
+      <span class="page-info">17 of 17</span>
+      <span class="nav-btn disabled">Next →</span>
+    </div>
+</body>
+</html>
+

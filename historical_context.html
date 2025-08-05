@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <title>Historical Context – Waves of Disruption</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 50px 80px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 15px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .content-container {
+      display: flex;
+      gap: 30px;
+      flex: 1;
+    }
+    .left-section {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+    }
+    .right-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .waves-container {
+      flex: 1;
+      position: relative;
+      margin-bottom: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 30px 20px 20px;
+    }
+    .waves-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .wave-chart {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+    .wave-svg {
+      width: 100%;
+      height: 100%;
+    }
+    .company-logos {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .logo-group {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-group.internet {
+      top: 40px;
+      left: 120px;
+    }
+    .logo-group.mobile {
+      top: 20px;
+      left: 320px;
+    }
+    .logo-group.ai {
+      top: 10px;
+      left: 520px;
+    }
+    .company-logo {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #374151;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 80px;
+      justify-content: center;
+      height: 40px;
+    }
+    .company-logo img {
+      height: 24px;
+      width: auto;
+      max-width: 60px;
+      object-fit: contain;
+    }
+    .wave-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-top: 8px;
+    }
+    .timeline-labels {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    .timeline-label {
+      font-size: 11px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+    .wave-details {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #0a2e8f;
+    }
+    .detail-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 15px;
+    }
+    .detail-item {
+      margin-bottom: 15px;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      border-left: 3px solid #e2e8f0;
+    }
+    .detail-item.internet {
+      border-left-color: #6366f1;
+    }
+    .detail-item.mobile {
+      border-left-color: #10b981;
+    }
+    .detail-item.ai {
+      border-left-color: #f59e0b;
+    }
+    .detail-wave {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .detail-description {
+      font-size: 12px;
+      color: #4b5563;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+    .detail-companies {
+      font-size: 11px;
+      color: #6b7280;
+      font-style: italic;
+    }
+    .value-pattern {
+      background: #0a2e8f;
+      color: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .pattern-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .pattern-description {
+      font-size: 13px;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+    .sources {
+      font-size: 10px;
+      color: #6b7280;
+      margin-top: 15px;
+      text-align: center;
+      font-style: italic;
+    }
+    .ai-projection {
+      stroke: #f59e0b;
+      stroke-width: 3;
+      stroke-dasharray: 8,4;
+      fill: none;
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <h2>Historical Context – Waves of Disruption</h2>
+      
+      <div class="content-container">
+        <div class="left-section">
+          <div class="waves-container">
+            <div class="waves-title">Tech is driven by major waves of innovation</div>
+            <div class="wave-chart">
+              <svg class="wave-svg" viewBox="0 0 700 300">
+                <!-- Internet/Cloud Wave -->
+                <path d="M 50 200 Q 100 150 150 180 Q 200 210 250 200" 
+                      stroke="#6366f1" stroke-width="4" fill="none"/>
+                
+                <!-- Mobile Wave -->
+                <path d="M 200 180 Q 250 120 300 140 Q 350 160 400 150" 
+                      stroke="#10b981" stroke-width="4" fill="none"/>
+                
+                <!-- Cloud/SaaS Wave -->
+                <path d="M 350 140 Q 400 80 450 100 Q 500 120 550 110" 
+                      stroke="#8b5cf6" stroke-width="4" fill="none"/>
+                
+                <!-- AI Wave (projected) -->
+                <path d="M 500 100 Q 550 40 600 60 Q 650 80 700 50" 
+                      class="ai-projection"/>
+              </svg>
+              
+              <!-- Company Logos -->
+              <div class="company-logos">
+                <div class="logo-group internet">
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/KET90WBtSx4F.png" alt="Amazon">
+                  </div>
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/L2oEifSCBjr4.png" alt="Google">
+                  </div>
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/fsmL4ziB6duO.png" alt="Microsoft">
+                  </div>
+                  <div class="wave-label">Internet/Cloud<br>1990s-2000s</div>
+                </div>
+                
+                <div class="logo-group mobile">
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/sVSxhi8u4p3u.png" alt="Apple">
+                  </div>
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/PDiFntvzGIEW.png" alt="Meta">
+                  </div>
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/UTRi41frRInS.png" alt="Uber">
+                  </div>
+                  <div class="wave-label">Mobile<br>2007-2015</div>
+                </div>
+                
+                <div class="logo-group ai">
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/tzCo1DFB34HK.png" alt="OpenAI">
+                  </div>
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/o1lUrGrRP2zq.png" alt="NVIDIA">
+                  </div>
+                  <div class="company-logo">
+                    <img src="/home/ubuntu/upload/search_images/IoGS2woyuobY.png" alt="Anthropic">
+                  </div>
+                  <div class="wave-label">AI<br>2020-2030</div>
+                </div>
+              </div>
+              
+              <!-- Timeline Labels -->
+              <div class="timeline-labels">
+                <span class="timeline-label">1990s</span>
+                <span class="timeline-label">2000s</span>
+                <span class="timeline-label">2010s</span>
+                <span class="timeline-label">2020s</span>
+                <span class="timeline-label">2025+</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="sources">
+            Sources: Harvard Business Review, Pew Research, Goldman Sachs
+          </div>
+        </div>
+        
+        <div class="right-section">
+          <div class="wave-details">
+            <div class="detail-title">Technology Wave Impact</div>
+            
+            <div class="detail-item internet">
+              <div class="detail-wave">Internet/Cloud (1990s-2000s)</div>
+              <div class="detail-description">Established digital infrastructure and e-commerce, creating giants like Amazon and Google.</div>
+              <div class="detail-companies">Key Winners: Amazon, Google, Microsoft</div>
+            </div>
+            
+            <div class="detail-item mobile">
+              <div class="detail-wave">Mobile (2007-2015)</div>
+              <div class="detail-description">Shifted computing to smartphones, enabling platforms like Apple and Facebook to dominate.</div>
+              <div class="detail-companies">Key Winners: Apple, Facebook, Uber</div>
+            </div>
+            
+            <div class="detail-item ai">
+              <div class="detail-wave">AI (2020-2030)</div>
+              <div class="detail-description">Transforming every industry through intelligent automation, with leaders like OpenAI, NVIDIA, and Anthropic.</div>
+              <div class="detail-companies">Key Winners: OpenAI, NVIDIA, Anthropic</div>
+            </div>
+          </div>
+          
+          <div class="value-pattern">
+            <div class="pattern-title">Value Creation Pattern</div>
+            <div class="pattern-description">
+              Each wave creates trillion-dollar value shifts, with early movers capturing disproportionate returns. 
+              AI represents the largest opportunity in tech history.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>2</span>
+    </div>
+  </div>
+    <div class="navigation">
+      <a href="introduction.html" class="nav-btn">← Previous</a>
+      <span class="page-info">2 of 17</span>
+      <a href="why_invest_now.html" class="nav-btn">Next →</a>
+    </div>
+</body>
+</html>
+

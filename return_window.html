@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>Capturing the 40x Return Window (2025-2030)</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 60px 100px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 42px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .content-container {
+      display: flex;
+      flex: 1;
+      gap: 40px;
+    }
+    .chart-container {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+    }
+    .info-container {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+    }
+    .info-item {
+      margin-bottom: 15px;
+      padding-left: 15px;
+      border-left: 3px solid #0a2e8f;
+    }
+    .info-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 5px;
+    }
+    .info-description {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.5;
+    }
+    .source {
+      font-size: 11px;
+      color: #666;
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .highlight-box {
+      background: #e8f0ff;
+      border-left: 4px solid #0a2e8f;
+      padding: 15px 20px;
+      margin: 0 0 20px;
+      font-size: 16px;
+    }
+    .download-options {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .return-window-badge {
+      position: absolute;
+      top: 80px;
+      right: 120px;
+      background: #ffd700;
+      color: #333;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <div class="download-options">
+      </div>
+      <div class="return-window-badge">40x Return Window</div>
+      <h2>Capturing the 40x Return Window (2025-2030)</h2>
+      
+      <div class="highlight-box">
+        <strong>Key Insight:</strong> We are positioned at the optimal entry point of the AI adoption curve (2.5% in 2025), with a projected 40x return window through 2030 as adoption reaches 16.5% before the curve flattens.
+      </div>
+      
+      <div class="content-container">
+        <div class="chart-container">
+          <div class="chart-title">AI Adoption Timeline: 2022-2035</div>
+          <div style="height: 350px;">
+            <canvas id="adoptionChart"></canvas>
+          </div>
+          <div class="source">Source: Goldman Sachs, McKinsey AI Adoption Research</div>
+        </div>
+        
+        <div class="info-container">
+          <div class="info-item">
+            <div class="info-title">2025 Entry Point</div>
+            <div class="info-description">
+              Currently at 2.5% AI adoption, representing the optimal entry point before the steep acceleration phase begins.
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-title">40x Return Window (2024-2030)</div>
+            <div class="info-description">
+              The critical investment window where early-stage AI companies will capture the majority of value creation as adoption accelerates from 2.5% to 16.5%.
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-title">2030 Peak Value</div>
+            <div class="info-description">
+              AI adoption reaches 16.5% by 2030, marking the peak value creation period before the curve begins to flatten and returns normalize.
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-title">Flattening Curve (2030-2035)</div>
+            <div class="info-description">
+              Post-2030, the adoption curve flattens as the market matures, making early investment positioning critical for maximum returns.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>10</span>
+    </div>
+  </div>
+
+  <script>
+    // AI Adoption Timeline Chart
+    const ctx = document.getElementById('adoptionChart').getContext('2d');
+    
+    // Create gradient for the return window area
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(255, 215, 0, 0.3)');
+    gradient.addColorStop(1, 'rgba(255, 215, 0, 0.1)');
+    
+    const adoptionChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'],
+        datasets: [
+          {
+            label: 'AI Market Adoption (%)',
+            data: [0.5, 1.0, 1.8, 2.5, 4.2, 6.8, 10.2, 13.8, 16.5, 18.2, 19.5, 20.5, 21.2, 21.8],
+            borderColor: '#e74c3c',
+            backgroundColor: 'transparent',
+            borderWidth: 3,
+            tension: 0.4,
+            pointBackgroundColor: '#e74c3c',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          },
+          {
+            label: '40x Return Window',
+            data: [null, null, null, 2.5, 4.2, 6.8, 10.2, 13.8, 16.5, null, null, null, null, null],
+            borderColor: '#ffd700',
+            backgroundColor: gradient,
+            borderWidth: 4,
+            tension: 0.4,
+            fill: true,
+            pointBackgroundColor: '#ffd700',
+            pointRadius: 0,
+            pointHoverRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              filter: function(item) {
+                return item.text !== '40x Return Window';
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                if (context.datasetIndex === 0) {
+                  return `AI Adoption: ${context.raw}%`;
+                }
+                return null;
+              },
+              afterLabel: function(context) {
+                const year = parseInt(context.label);
+                if (year === 2025) {
+                  return '2025 Entry Point';
+                } else if (year === 2030) {
+                  return '2030 Peak Value';
+                }
+                return null;
+              }
+            }
+          },
+          annotation: {
+            annotations: {
+              entryPoint: {
+                type: 'point',
+                xValue: '2025',
+                yValue: 2.5,
+                backgroundColor: '#e74c3c',
+                borderColor: '#c0392b',
+                borderWidth: 2,
+                radius: 8,
+                label: {
+                  content: '2.5% Adoption\n2025 Entry Point',
+                  enabled: true,
+                  position: 'top',
+                  backgroundColor: '#e74c3c',
+                  color: 'white',
+                  font: {
+                    size: 11
+                  }
+                }
+              },
+              peakValue: {
+                type: 'point',
+                xValue: '2030',
+                yValue: 16.5,
+                backgroundColor: '#e74c3c',
+                borderColor: '#c0392b',
+                borderWidth: 2,
+                radius: 8,
+                label: {
+                  content: '16.5% Adoption\n2030 Peak Value',
+                  enabled: true,
+                  position: 'top',
+                  backgroundColor: '#e74c3c',
+                  color: 'white',
+                  font: {
+                    size: 11
+                  }
+                }
+              },
+              returnWindow: {
+                type: 'box',
+                xMin: '2024',
+                xMax: '2030',
+                yMin: 0,
+                yMax: 18,
+                backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                borderColor: '#ffd700',
+                borderWidth: 2,
+                label: {
+                  content: '40x Return\nWindow\n2024-2030',
+                  enabled: true,
+                  position: 'center',
+                  backgroundColor: '#ffd700',
+                  color: '#333',
+                  font: {
+                    size: 12,
+                    weight: 'bold'
+                  }
+                }
+              },
+              flatteningCurve: {
+                type: 'label',
+                xValue: '2033',
+                yValue: 22,
+                content: 'Flattening\nCurve\n2030-2035',
+                backgroundColor: '#e74c3c',
+                color: 'white',
+                font: {
+                  size: 11
+                }
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 25,
+            title: {
+              display: true,
+              text: 'Market Adoption (%)'
+            },
+            ticks: {
+              callback: function(value) {
+                return value + '%';
+              }
+            },
+            grid: {
+              color: '#e9ecef'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            },
+            grid: {
+              color: '#e9ecef'
+            }
+          }
+        }
+      }
+    });
+  </script>
+    <div class="navigation">
+      <a href="why_invest_now.html" class="nav-btn">← Previous</a>
+      <span class="page-info">4 of 17</span>
+      <a href="ai_tsunami.html" class="nav-btn">Next →</a>
+    </div>
+</body>
+</html>
+

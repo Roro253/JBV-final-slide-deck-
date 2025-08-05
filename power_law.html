@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+  <title>Power Law in Private Markets (2025)</title>
+  <style>
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    .slide-container {
+      width: 1280px;
+      min-height: 720px;
+      background: white;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-content {
+      flex: 1;
+      padding: 50px 80px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .footer {
+      height: 50px;
+      background: #0a2e8f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 100px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 36px;
+      font-weight: 400;
+      margin-bottom: 15px;
+      color: #0a2e8f;
+      letter-spacing: -1px;
+    }
+    .highlight-box {
+      background: #e8f0ff;
+      border-left: 4px solid #0a2e8f;
+      padding: 12px 15px;
+      margin: 0 0 20px;
+      font-size: 15px;
+    }
+    .chart-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a2e8f;
+      margin-bottom: 15px;
+      text-align: center;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 8px;
+    }
+    .chart-wrapper {
+      height: 400px;
+      position: relative;
+      margin-bottom: 15px;
+    }
+    .source {
+      font-size: 11px;
+      color: #666;
+      font-style: italic;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .company-logo {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      bottom: 25px;
+    }
+    .openai-logo {
+      background: #10a37f;
+      left: 60px;
+    }
+    .anthropic-logo {
+      background: #d4a574;
+      left: 160px;
+    }
+    .xai-logo {
+      background: #000000;
+      left: 260px;
+    }
+    .databricks-logo {
+      background: #ff3621;
+      left: 360px;
+    }
+    .ssi-logo {
+      background: #6366f1;
+      left: 460px;
+    }
+    .scale-logo {
+      background: #059669;
+      left: 560px;
+    }
+    .perplexity-logo {
+      background: #1e40af;
+      left: 660px;
+    }
+    .rest-logo {
+      background: #6b7280;
+      left: 760px;
+    }
+    .power-law-callout {
+      position: absolute;
+      top: 80px;
+      right: 50px;
+      background: rgba(255,255,255,0.95);
+      border: 2px solid #0a2e8f;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10;
+      max-width: 200px;
+    }
+    .power-law-callout h4 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      font-weight: bold;
+      color: #0a2e8f;
+    }
+    .power-law-stat {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .power-law-note {
+      font-size: 11px;
+      color: #666;
+      margin-top: 8px;
+      font-style: italic;
+    }    .navigation {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 25px;
+      z-index: 1000;
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.3);
+      color: white;
+      text-decoration: none;
+    }
+    .nav-btn:disabled, .nav-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .page-info {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-content">
+      <h2>Power Law in Private Markets (2025)</h2>
+      
+      <div class="highlight-box">
+        <strong>Key Insight:</strong> Private AI markets show even more extreme power law concentration - OpenAI's $324.6B valuation is 91x larger than the average of the rest of the top 40 AI companies ($3.58B), demonstrating winner-take-most dynamics.
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-title">→ Private Market Valuations (Billions $)</div>
+        <div class="chart-wrapper">
+          <canvas id="privateMarketChart"></canvas>
+          
+          <!-- Power Law Analysis -->
+          <div class="power-law-callout">
+            <h4>Private Power Law</h4>
+            <div class="power-law-stat">
+              <span>Top 7 Avg:</span>
+              <span><strong>$118B</strong></span>
+            </div>
+            <div class="power-law-stat">
+              <span>Rest of Top 40:</span>
+              <span><strong>$3.58B</strong></span>
+            </div>
+            <div class="power-law-stat">
+              <span>Ratio:</span>
+              <span><strong>33:1</strong></span>
+            </div>
+            <div class="power-law-note">
+              Top AI companies capture 33x more value than average top 40 company
+            </div>
+          </div>
+        </div>
+        <div class="source">Source: PitchBook, CB Insights, private market valuations as of July 2025</div>
+      </div>
+    </div>
+    <div class="footer">
+      <span>CONFIDENTIAL • JBV CAPITAL</span>
+      <span>11</span>
+    </div>
+  </div>
+
+  <script>
+    // Private Market Valuation Chart
+    const ctx = document.getElementById('privateMarketChart').getContext('2d');
+    
+    const privateMarketChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['OpenAI', 'Anthropic', 'xAI', 'Databricks', 'Safe SI', 'Scale AI', 'Perplexity', 'Rest Top 40'],
+        datasets: [{
+          label: 'Valuation (B$)',
+          data: [324.6, 170, 90.6, 62, 32, 29.2, 18, 3.58],
+          backgroundColor: [
+            '#10a37f', // OpenAI green
+            '#d4a574', // Anthropic brown
+            '#000000', // xAI black
+            '#ff3621', // Databricks red
+            '#6366f1', // Safe SI purple
+            '#059669', // Scale green
+            '#1e40af', // Perplexity blue
+            '#6b7280'  // Rest gray
+          ],
+          borderColor: [
+            '#10a37f',
+            '#d4a574',
+            '#000000',
+            '#ff3621',
+            '#6366f1',
+            '#059669',
+            '#1e40af',
+            '#6b7280'
+          ],
+          borderWidth: 2,
+          borderRadius: 4,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                if (context.dataIndex === 7) {
+                  return `Average of Rest of Top 40: $${context.raw}B`;
+                }
+                return `${context.label}: $${context.raw}B`;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 350,
+            title: {
+              display: true,
+              text: 'Valuation (Billions $)',
+              font: {
+                size: 14,
+                weight: 'bold'
+              }
+            },
+            ticks: {
+              callback: function(value) {
+                return '$' + value + 'B';
+              },
+              font: {
+                size: 12
+              }
+            },
+            grid: {
+              color: '#e9ecef'
+            }
+          },
+          x: {
+            title: {
+              display: false
+            },
+            ticks: {
+              font: {
+                size: 11
+              },
+              maxRotation: 45
+            },
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+  </script>
+    <div class="navigation">
+      <a href="public_markets.html" class="nav-btn">← Previous</a>
+      <span class="page-info">11 of 17</span>
+      <a href="private_markets.html" class="nav-btn">Next →</a>
+    </div>
+</body>
+</html>
+
